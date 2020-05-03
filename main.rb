@@ -15,8 +15,18 @@ module Enumerable
     end
     self
   end
+
+  def my_select
+    arr = []
+    for i in self do
+      if yield(i)
+        arr.push(i)
+      end
+    end
+    arr
+  end
 end
 
-[2, 3, 4, 5, 6].my_each_with_index {|value, index|
-  puts "value: #{value}, index: #{index}"
+ p [2, 3, 4, 5, 6].my_select { |n|
+  n.even?
 }
