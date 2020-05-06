@@ -56,7 +56,16 @@ module Enumerable
   def my_count
     self.length
   end
+
+  def my_map
+    my_arr = []
+    for i in self do
+      if yield(i)
+        my_arr.push(i)
+      end
+    end
+    my_arr
+  end
 end
 
-ary = [1, 2, 4, 2, 9]
-p ary.count{ |x| x%2==0 }
+p (1...4).map { |i| i*i }  
