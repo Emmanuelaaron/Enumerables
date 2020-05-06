@@ -52,6 +52,11 @@ module Enumerable
     end
     true
   end
+
+  def my_count
+    self.length
+  end
 end
 
-p %w{ant bear cat}.my_none? { |word| word.length >= 5 }
+ary = [1, 2, 4, 2, 9]
+p ary.count{ |x| x%2==0 }
