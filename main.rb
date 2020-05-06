@@ -25,8 +25,16 @@ module Enumerable
     end
     arr
   end
+
+  def my_all?
+    for i in self do
+      if yield(i)
+        return true
+      else
+        return false
+      end
+    end
+  end
 end
 
- p [2, 3, 4, 5, 6].my_select { |n|
-  n.even?
-}
+p ["ca", "dog", "cow", "bear"].my_all?{ |word| word.length >= 3 }
