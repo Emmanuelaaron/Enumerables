@@ -28,7 +28,7 @@ module Enumerable
 
   def my_all?
     for i in self do  
-     if yield(i) == false 
+     if !yield(i)
       return false 
      end
     end
@@ -44,8 +44,14 @@ module Enumerable
         return false
       end
     end
-    
+  end
+
+  def my_none?
+    for i in self do
+      return false if yield(i)
+    end
+    true
   end
 end
 
-p ["buy", "jhi"].my_all?{ |word| word.length == 3 }
+p %w{ant bear cat}.my_none? { |word| word.length >= 5 }
