@@ -27,6 +27,16 @@ module Enumerable
   end
 
   def my_all?
+    for i in self do  
+     if yield(i) == false 
+      return false 
+     end
+    end
+    true
+  end
+
+  def my_any?
+    return false if self.length == 0 
     for i in self do
       if yield(i)
         return true
@@ -34,7 +44,8 @@ module Enumerable
         return false
       end
     end
+    
   end
 end
 
-p ["ca", "dog", "cow", "bear"].my_all?{ |word| word.length >= 3 }
+p ["buy", "jhi"].my_all?{ |word| word.length == 3 }
