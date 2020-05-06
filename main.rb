@@ -1,6 +1,9 @@
+# rubocop: disable Style/For, Style/GuardClause
+# rubocop: disable Style/RedundantSelf, Style/RedundantReturn
 module Enumerable
   def my_each
     return to_enum(:my_each) unless block_given?
+
     for i in self do
       yield(i)
     end
@@ -9,7 +12,8 @@ module Enumerable
   def my_each_with_index
     i = 0
     my_arr = to_a
-    until i == self.length
+    len = self.length
+    until i == len
       yield(my_arr[i], i)
       i += 1
     end
@@ -19,24 +23,21 @@ module Enumerable
   def my_select
     arr = []
     for i in self do
-      if yield(i)
-        arr.push(i)
-      end
+      arr.push(i) if yield(i)
     end
     arr
   end
 
   def my_all?
-    for i in self do  
-     if !yield(i)
-      return false 
-     end
+    for i in self do
+      return false unless yield(i)
     end
     true
   end
 
   def my_any?
-    return false if self.length == 0 
+    return false if self.length.zero?
+
     for i in self do
       if yield(i)
         return true
@@ -54,18 +55,21 @@ module Enumerable
   end
 
   def my_count
-    self.length
+    return self.length
   end
 
   def my_map
     my_arr = []
     for i in self do
-      if yield(i)
-        my_arr.push(i)
-      end
+      my_arr.push(i) if yield(i)
     end
     my_arr
   end
+
+  def my_inject
+    "h"
+  end
 end
 
-p (1...4).map { |i| i*i }  
+# rubocop: enable Style/For, Style/GuardClause
+# rubocop: enable Style/RedundantSelf, Style/RedundantReturn
