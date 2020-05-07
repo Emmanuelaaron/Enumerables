@@ -54,22 +54,42 @@ module Enumerable
     true
   end
 
-  def my_count
-    return self.length
+  def my_count(par1=nil)
+    count = 0
+    if par1
+      for i in self do
+        if par1 == i
+          count += 1
+        end
+      end
+    elsif block_given?
+      my_each {|x| count += 1 if yield(x)}
+
+    else
+      count = self.length
+    end
+    count
   end
 
   def my_map
     my_arr = []
     for i in self do
-      my_arr.push(i) if yield(i)
+      my_arr.push(yield(i)) if yield(i)
     end
     my_arr
   end
 
   def my_inject
-    "h"
+    for i in self do
+      
+    end
   end
 end
 
 # rubocop: enable Style/For, Style/GuardClause
 # rubocop: enable Style/RedundantSelf, Style/RedundantReturn
+
+ary = [1, 2, 4, 2]
+p ary.my_count               #=> 4
+p ary.my_count(2)            #=> 2
+p ary.my_count{ |x| x%2==0 } #=> 3
