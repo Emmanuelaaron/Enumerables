@@ -100,10 +100,16 @@ module Enumerable
     count
   end
 
-  def my_map
+  def my_map(proc=nil)
     my_arr = []
-    for i in self do
-      my_arr.push(yield(i)) if yield(i)
+    if block_given?
+      for i in self do
+        my_arr.push(yield(i)) if yield(i)
+      end
+    elsif proc
+      for i in self do
+        my_arr.push(proc.call(i))
+      end
     end
     my_arr
   end
@@ -117,11 +123,5 @@ end
 
 # rubocop: enable Style/For, Style/GuardClause
 # rubocop: enable Style/RedundantSelf, Style/RedundantReturn
-p %w{ant bear cat}.my_none? { |word| word.length == 5 } #=> true
-p %w{ant bear cat}.my_none? { |word| word.length >= 4 } #=> false
-p %w{ant bear cat}.my_none?(/d/)                        #=> true
-p [1, 3.14, 42].my_none?(Float)                         #=> false
-p [].my_none?                                           #=> true
-p [nil].my_none?                                        #=> true
-p [nil, false].my_none?                                 #=> true
-p [nil, false, true].my_none?                           #=> false
+p (1..4).my_map { |i| i*i }      #=> [1, 4, 9, 16]
+p (1..4).my_map { "cat"  }
