@@ -142,3 +142,6 @@ end
 
 # rubocop: enable Style/For, Style/CaseEquality, Metrics/PerceivedComplexity, Metrics/MethodLength
 # rubocop: enable Style/RedundantSelf, Metrics/CyclomaticComplexity, Metrics/ModuleLength
+def multiply_els(arr)
+  arr.my_inject(:*)
+end
