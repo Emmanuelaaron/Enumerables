@@ -66,9 +66,19 @@ module Enumerable
     false
   end
 
-  def my_none?
-    for i in self do
-      return false if yield(i)
+  def my_none?(par1=nil)
+    if par1
+      for i in 0...length do
+        return false if par1 === self[i]
+      end
+    elsif block_given?
+      for i in self do
+        return false if yield(i)
+      end  
+    else
+      for i in self do
+        return false if i
+      end
     end
     true
   end
@@ -107,9 +117,11 @@ end
 
 # rubocop: enable Style/For, Style/GuardClause
 # rubocop: enable Style/RedundantSelf, Style/RedundantReturn
-p %w[ant bear cat].my_any? { |word| word.length >= 3 } #=> true
-p %w[ant bear cat].my_any? { |word| word.length >= 4 } #=> true
-p %w[ant bear cat].my_any?(/d/)                        #=> false
-p [nil, true, 99].my_any?(Integer)                     #=> true
-p [nil, true, 99].my_any?                              #=> true
-p [].my_any?                                           #=> false
+p %w{ant bear cat}.my_none? { |word| word.length == 5 } #=> true
+p %w{ant bear cat}.my_none? { |word| word.length >= 4 } #=> false
+p %w{ant bear cat}.my_none?(/d/)                        #=> true
+p [1, 3.14, 42].my_none?(Float)                         #=> false
+p [].my_none?                                           #=> true
+p [nil].my_none?                                        #=> true
+p [nil, false].my_none?                                 #=> true
+p [nil, false, true].my_none?                           #=> false
