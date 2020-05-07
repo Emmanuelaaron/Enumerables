@@ -114,14 +114,36 @@ module Enumerable
     my_arr
   end
 
-  def my_inject
-    for i in self do
-      
+  def my_inject(par1=nil, par2=nil)
+    my_arr = self.to_a
+    if block_given? && par1
+      accumulator = par1
+      for i in my_arr do
+        accumulator = yield(accumulator, i)
+      end
+    elsif block_given?
+      my_arr = self.to_a
+      accumulator = my_arr[0]
+      for i in 1...my_arr.length do
+        accumulator = yield(accumulator, my_arr[i])
+      end
+
+    elsif par1 && !block_given? && !par2
+      accumulator = my_arr[0]
+      for i in 1...my_arr.length do
+        accumulator =  accumulator.send(par1, my_arr[i])
+      end
+
+    elsif par1 && par2
+      accumulator = par1
+      for i in 0...my_arr.length do
+        accumulator =  accumulator.send(par2, my_arr[i])
+      end
     end
+    accumulator
   end
 end
 
 # rubocop: enable Style/For, Style/GuardClause
 # rubocop: enable Style/RedundantSelf, Style/RedundantReturn
-p (1..4).my_map { |i| i*i }      #=> [1, 4, 9, 16]
-p (1..4).my_map { "cat"  }
+# Sum some numbers
