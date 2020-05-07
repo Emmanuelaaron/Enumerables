@@ -10,6 +10,8 @@ module Enumerable
   end
 
   def my_each_with_index
+    return to_enum(:my_each_with_index) unless block_given?
+
     i = 0
     my_arr = to_a
     len = self.length
@@ -21,6 +23,8 @@ module Enumerable
   end
 
   def my_select
+    return to_enum(:my_select) unless block_given?
+
     arr = []
     for i in self do
       arr.push(i) if yield(i)
@@ -28,9 +32,19 @@ module Enumerable
     arr
   end
 
-  def my_all?
-    for i in self do
-      return false unless yield(i)
+  def my_all?(par1=nil)
+    if par1
+      for i in 0...length do
+        return false unless par1 === self[i]
+      end
+    elsif block_given?
+      for i in self do
+        return false unless yield(i)
+      end  
+    else
+      for i in self do
+        return false if i.nil? || i === false
+      end
     end
     true
   end
@@ -88,8 +102,9 @@ end
 
 # rubocop: enable Style/For, Style/GuardClause
 # rubocop: enable Style/RedundantSelf, Style/RedundantReturn
-
-ary = [1, 2, 4, 2]
-p ary.my_count               #=> 4
-p ary.my_count(2)            #=> 2
-p ary.my_count{ |x| x%2==0 } #=> 3
+p %w[ant bear cat].my_all? { |word| word.length >= 3 } #=> true
+p %w[ant bear cat].my_all? { |word| word.length >= 4 } #=> false
+p %w[ant bear cat].my_all?(/t/)                        #=> false
+p [1, 2i, 3.14].my_all?(Numeric)                       #=> true
+p [0.09, true, 99].my_all?                              #=> false
+p [].my_all?                                           #=> true
