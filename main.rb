@@ -99,14 +99,16 @@ module Enumerable
   end
 
   def my_map(proc = nil)
+    return to_enum(:my_map) unless block_given?
+
     my_arr = []
-    if block_given?
-      for i in self do
-        my_arr.push(yield(i)) if yield(i)
-      end
-    elsif proc
+    if proc
       for i in self do
         my_arr.push(proc.call(i))
+      end
+    else
+      for i in self do
+        my_arr.push(yield(i))
       end
     end
     my_arr
